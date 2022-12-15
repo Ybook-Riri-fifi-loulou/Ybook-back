@@ -20,10 +20,6 @@ class PostController{
         res.json(await postService.deletePost(req.body.id))
     }
 
-    async newPostComment (req: Request, res: Response, next: NextFunction) {
-        res.json(await postService.newPostComment(req.body))
-    }
-
     async getPostComments (req: Request, res: Response, next: NextFunction) {
         res.json(await postService.getPostComments(req.body.id))
     }
