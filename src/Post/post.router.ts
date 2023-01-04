@@ -8,6 +8,6 @@ postRouter.post('/', postController.createPost)
 postRouter.put('/:id', postController.updatePost);
 postRouter.delete('/:id', postController.deletePost);
 
-postRouter.post('/like/', postController.newPostLike);
+
 
 postRouter.get('/friends', postController.getFriendPosts);

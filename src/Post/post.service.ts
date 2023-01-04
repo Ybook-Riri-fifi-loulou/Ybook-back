@@ -36,15 +36,6 @@ class PostService {
     }
 
 
-    async getPostComments(id: number) {
-        return await prisma.postComment.findMany({
-            where: { postId: id },
-            include: {user: true}
-        });
-    }
-
-
-
     async newPostLike(postLike: PostLikeModel) {
         await prisma.postLike.create({
             data: {
@@ -53,12 +44,6 @@ class PostService {
             }
         })
         return postLike;
-    }
-
-    async getLikePost() {
-        return await prisma.postLike.findMany({
-            include: {user: true}
-        });
     }
 
     async getFriendPosts() {
