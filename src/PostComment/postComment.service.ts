@@ -14,6 +14,31 @@ class PostCommentService{
         })
         return postComment;
     }
+
+    async getPostComments(id: number) {
+        return await prisma.postComment.findMany({
+            where: { postId: id },
+            include: {user: true}
+        });
+    }
+
+    async deletePostComment(id: number) {
+        await prisma.postComment.delete({
+            where: { id: id },
+        })
+        return;
+    }
+
+    async updatePostComment(body: any) {
+        await prisma.postComment.update({
+            where: { id: body.id },
+            data: {
+                text: body.htmlContent,
+            },
+        })
+        return;
+
+    }
 }
 
 export const postCommentService = new PostCommentService();

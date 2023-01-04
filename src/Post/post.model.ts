@@ -1,13 +1,6 @@
 import {UserModel} from "../User/user.model";
 import {PostCommentModel} from "../PostComment/postComment.model";
-
-export interface PostLikeModel {
-    id: number;
-    userId: number;
-    postId: number;
-    user: UserModel;
-    post: PostModel;
-}
+import {PostLikeModel} from "../PostLikes/postLikes.model";
 
 export interface PostAttachmentModel {
     id: number;

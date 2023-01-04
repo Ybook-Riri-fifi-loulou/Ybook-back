@@ -20,17 +20,8 @@ class PostController{
         res.json(await postService.deletePost(req.body.id))
     }
 
-    async getPostComments (req: Request, res: Response, next: NextFunction) {
-        res.json(await postService.getPostComments(req.body.id))
-    }
-
-
     async newPostLike (req: Request, res: Response, next: NextFunction) {
         res.json(await postService.newPostLike(req.body))
-    }
-
-    async getLikePost (req: Request, res: Response, next: NextFunction) {
-        res.json(await postService.getLikePost())
     }
 
 
