@@ -10,6 +10,11 @@ class UserController {
     async getUserPosts (req: Request, res: Response, next: NextFunction) {
         res.json(await userService.getUserPosts(req.params.id))
     }
+
+
+    async createUser (req: Request, res: Response, next: NextFunction) {
+        res.json(await userService.createUser(req.body))
+    }
 }
 
 
