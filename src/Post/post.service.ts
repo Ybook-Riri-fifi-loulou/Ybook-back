@@ -1,5 +1,6 @@
 import {PrismaClient} from '@prisma/client'
-import {PostLikeModel, PostModel} from "./post.model";
+import {PostModel} from "./post.model";
+import {PostLikeModel} from "../PostLikes/postLikes.model";
 
 const prisma = new PrismaClient()
 
