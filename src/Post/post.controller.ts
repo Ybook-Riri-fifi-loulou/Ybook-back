@@ -7,6 +7,10 @@ class PostController{
         res.json(await postService.getAllPosts())
     }
 
+    async getPostById (req: Request, res: Response, next: NextFunction) {
+        res.json(await postService.getPostById(Number(req.params.id)))
+    }
+
     async createPost (req: Request, res: Response, next: NextFunction) {
         console.log(req.body)
         res.json(await postService.createPost(req.body))
