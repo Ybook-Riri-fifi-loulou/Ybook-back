@@ -1,5 +1,6 @@
 
 import {PrismaClient} from "@prisma/client";
+import { PostModel } from "../Post/post.model";
 import {PostLikeModel} from "./postLikes.model";
 
 
@@ -21,6 +22,23 @@ class PostLikesService {
         return await prisma.postLike.findMany({
             include: {user: true}
         });
+    }
+
+    async getPostLikesByPostId(postId: number) {
+        return await prisma.postLike.count({
+            where: { postId: postId },
+        })
+    }
+
+    async getLikeByPost(id : number) {
+        await prisma.postLike.aggregate({
+            _count: {
+                id: true,
+            },
+            where: {
+                id: id
+            }
+        })
     }
 
     async deletePostLike(id: number) {
