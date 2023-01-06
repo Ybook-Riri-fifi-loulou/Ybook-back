@@ -1,7 +1,8 @@
 
-import {PrismaClient} from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { PostModel } from "../Post/post.model";
-import {PostLikeModel} from "./postLikes.model";
+import { UserModel } from "../User/user.model";
+import { PostLikeModel } from "./postLikes.model";
 
 
 const prisma = new PrismaClient()
@@ -9,18 +10,31 @@ const prisma = new PrismaClient()
 class PostLikesService {
 
     async newPostLike(postLike: PostLikeModel) {
-        await prisma.postLike.create({
-            data: {
-                user: { connect: { id: postLike.userId } },
-                post: { connect: { id: postLike.postId } },
+        const checkIfPostLikeExist = await prisma.postLike.findMany({
+            where: {
+                userId: postLike.userId,
+                postId: postLike.postId
             }
-        })
-        return postLike;
+        });
+
+        if(checkIfPostLikeExist.length > 0) {
+            await this.deletePostLike(postLike.userId, postLike.postId);
+            return postLike
+        } else {
+            await prisma.postLike.create({
+                data: {
+                    user: { connect: { id: postLike.userId } },
+                    post: { connect: { id: postLike.postId } },
+                }
+            })
+
+            return postLike
+        }
     }
 
     async getLikePost() {
         return await prisma.postLike.findMany({
-            include: {user: true}
+            include: { user: true }
         });
     }
 
@@ -30,8 +44,8 @@ class PostLikesService {
         })
     }
 
-    async getLikeByPost(id : number) {
-        await prisma.postLike.aggregate({
+    async getLikeByPost(id: number) {
+        return await prisma.postLike.aggregate({
             _count: {
                 id: true,
             },
@@ -41,13 +55,14 @@ class PostLikesService {
         })
     }
 
-    async deletePostLike(id: number) {
-        await prisma.postLike.delete({
-            where: { id: id },
+    async deletePostLike(userId: number, postId: number) {
+        await prisma.postLike.deleteMany({
+            where: {
+                userId,
+                postId
+            }
         })
-        return;
     }
-
 }
 
 export const postLikesService = new PostLikesService();

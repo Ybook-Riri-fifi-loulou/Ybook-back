@@ -15,7 +15,7 @@ class PostLikesController {
     }
 
     async deletePostLike(req: Request, res: Response, next: NextFunction) {
-        res.json(await postLikesService.deletePostLike(req.body.id))
+        res.json(await postLikesService.deletePostLike(Number(req.params.userId), Number(req.params.postId)))
     }
 }
 
