@@ -12,6 +12,13 @@ class PostService {
         })
     }
 
+    async getPostById(id : number) {
+        return prisma.post.findUnique({
+            where: {id},
+            include: {user: true, postLikes: true}
+        })
+    }
+
     async createPost(post: PostModel) {
         await prisma.post.create({
             data: {
@@ -30,6 +37,7 @@ class PostService {
         })
         return post;
     }
+
     async deletePost(id: number) {
         await prisma.post.delete({
             where: { id: id },
