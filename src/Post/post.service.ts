@@ -8,7 +8,7 @@ class PostService {
     async getAllPosts() {
         return prisma.post.findMany({
             take: 10,
-            include: {user: true, postLikes: true}
+            include: {user: true, postLikes: true, postComments: true}
         })
     }
 
