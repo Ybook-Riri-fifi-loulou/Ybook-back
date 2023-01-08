@@ -12,6 +12,12 @@ class UserService{
         })
     }
 
+    async getUserById(id : number) {
+        return await prisma.user.findUnique({
+            where: {id}
+        })
+    }
+
     async getUserPosts(id: string) {
         return await prisma.post.findMany({
             where: { userId: Number(id) },
