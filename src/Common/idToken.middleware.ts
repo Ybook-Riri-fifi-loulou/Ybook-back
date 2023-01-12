@@ -13,8 +13,12 @@ export const idTokenMiddleware = async (req: Request, res: Response, next: NextF
     try {
         const payload = await verifier.verify(token, { tokenUse: "id" });
         console.log(payload);
+        if (payload) {
+            next()
+        } else {
+            next({status: 401, message: "Unauthorized"});
+        }
     } catch (err) {
         console.log(err);
     }
-
 }
