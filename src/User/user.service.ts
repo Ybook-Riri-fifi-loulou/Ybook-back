@@ -1,5 +1,4 @@
 import {PrismaClient} from "@prisma/client";
-import {UserModel} from "./user.model";
 
 const prisma = new PrismaClient()
 
@@ -25,12 +24,12 @@ class UserService{
         });
     }
 
-    async createUser(user: UserModel) {
+    async createUser(firstname: string, lastname: string, email: string) {
         return await prisma.user.create({
             data: {
-                firstname: user.firstName,
-                lastname: user.lastName,
-                email: user.email,
+                firstname: firstname,
+                lastname: lastname,
+                email: email,
             }
         });
     }
