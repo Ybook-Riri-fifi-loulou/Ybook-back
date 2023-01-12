@@ -1,11 +1,11 @@
 import {Router} from "express";
 import {userController} from "./user.controller";
-import {idTokenMiddleware} from "../Common/idToken.middleware";
+import {CheckTokenIsValid, idTokenMiddleware} from "../Common/idToken.middleware";
 
 
 export const userRouter = Router();
 
-userRouter.get('/', userController.getAllUsers);
-userRouter.get('/:id', userController.getUserById);
-userRouter.get('/:id', userController.getUserPosts);
+userRouter.get('/',CheckTokenIsValid, userController.getAllUsers);
+userRouter.get('/:id',CheckTokenIsValid, userController.getUserById);
+userRouter.get('/:id', CheckTokenIsValid, userController.getUserPosts);
 userRouter.post('/', idTokenMiddleware, userController.createUser);

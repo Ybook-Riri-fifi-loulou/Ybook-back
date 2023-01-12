@@ -33,3 +33,25 @@ export const idTokenMiddleware = async (req: Request, res: Response, next: NextF
         next({status: 401, message: "Token Expired"});
     }
 }
+
+
+export const CheckTokenIsValid = async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.body.token;
+    const verifier = CognitoJwtVerifier.create({
+        tokenUse: "id",
+        userPoolId: "eu-west-3_Iekd8jDeb",
+        clientId: "7llslfb09dtag2h7117og3ku72",
+    });
+
+    try {
+        const payload = await verifier.verify(token, {tokenUse: "id"});
+
+        if (payload) {
+            next();
+        } else {
+            next({status: 401, message: "Unauthorized"});
+        }
+    } catch (err) {
+        next({status: 401, message: "Token Expired"});
+    }
+}
