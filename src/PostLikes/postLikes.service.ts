@@ -32,7 +32,13 @@ class PostLikesService {
 
     async getLikePost() {
         return await prisma.postLike.findMany({
-            include: { user: true }
+            select: {
+                user: {
+                    select: {
+                        id: true
+                    }
+                }
+            }
         });
     }
 
