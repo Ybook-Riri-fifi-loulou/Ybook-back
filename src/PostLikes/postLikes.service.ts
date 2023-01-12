@@ -1,7 +1,5 @@
 
 import { PrismaClient } from "@prisma/client";
-import { PostModel } from "../Post/post.model";
-import { UserModel } from "../User/user.model";
 import { PostLikeModel } from "./postLikes.model";
 
 
