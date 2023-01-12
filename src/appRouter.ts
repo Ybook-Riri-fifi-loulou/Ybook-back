@@ -10,6 +10,6 @@ export const appRouter = Router();
 
 appRouter.use('/post', postRouter);
 appRouter.use('/user', userRouter);
-appRouter.use('/postComment', postCommentRouter);
+appRouter.use('/postComments', postCommentRouter);
 appRouter.use('/postLikes', postLikesRouter);
 appRouter.use('conversation', conversationRouter);
