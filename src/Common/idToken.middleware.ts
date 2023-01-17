@@ -45,6 +45,7 @@ export const CheckTokenIsValid = async (req: Request, res: Response, next: NextF
 
     try {
         const payload = await verifier.verify(token, {tokenUse: "id"});
+        res.locals.email = payload['email'];
 
         if (payload) {
             next();

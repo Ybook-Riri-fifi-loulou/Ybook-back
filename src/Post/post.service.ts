@@ -1,4 +1,4 @@
-import {PrismaClient} from '@prisma/client'
+import {PrismaClient} from "@prisma/client"
 import {PostModel} from "./post.model";
 import {PostLikeModel} from "../PostLikes/postLikes.model";
 
@@ -59,19 +59,82 @@ class PostService {
     }
 
 
-    async newPostLike(postLike: PostLikeModel) {
-        await prisma.postLike.create({
-            data: {
-                user: { connect: { id: postLike.userId } },
-                post: { connect: { id: postLike.postId } },
-            }
+    // async newPostLike(postLike: PostLikeModel) {
+    //     await prisma.postLike.create({
+    //         data: {
+    //             user: { connect: { id: postLike.userId } },
+    //             post: { connect: { id: postLike.postId } },
+    //         }
+    //     })
+    //     return postLike;
+    // }
+
+    async getFriendPosts(email: string) {
+        let userId = prisma.user.findUnique({
+            where: { email: email },
+            select: { id: true }
         })
-        return postLike;
-    }
 
-    async getFriendPosts() {
-            //besoin de recupere le user connecter, la liste des amis et les poste de la liste d'amis
 
+        return await prisma.post.findMany({
+            where: {
+                user: {
+                    AND: [
+                        {
+                            OR: [
+                                {
+                                    fromFriendship: {
+                                        some: {
+                                            OR: [
+                                                {
+                                                    toId: userId,
+                                                },
+                                                {
+                                                    fromId: userId,
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                                {
+                                    toFrienship: {
+                                        some: {
+                                            OR: [
+                                                {
+                                                    toId: userId,
+                                                },
+                                                {
+                                                    fromId: userId,
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            id: {
+                                not: userId,
+                            },
+                        },
+                    ],
+                },
+            },
+            include: {
+                _count: {
+                    select: {
+                        postLikes: true,
+                        postComments: true,
+                    },
+                },
+                postAttachments: {
+                    select: {
+                        s3Key: true,
+                        type: true,
+                    },
+                },
+            },
+        });
     }
 
 }
