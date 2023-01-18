@@ -5,9 +5,36 @@ import {PostLikeModel} from "../PostLikes/postLikes.model";
 const prisma = new PrismaClient()
 
 class PostService {
-    async getAllPosts() {
+    async getAllPosts(email: string) {
+
+        let blockedUsersEmails: string[] = [];
+
+        // get list of user blocked
+        let blockedUsers = await prisma.user.findUnique({
+            where: {
+                email: email
+            },
+            select: {
+                blockedUsers: true
+            }
+        })
+
+        //get email for each blocked user and add to array
+        blockedUsers?.blockedUsers.forEach((user) => {
+            blockedUsersEmails.push(user.email);
+        })
+
         return prisma.post.findMany({
-            take: 10,
+            where: {
+                NOT: {
+                    user: {
+                        email: {
+                            in: blockedUsersEmails
+                        }
+                    }
+                }
+            },
+            take: 30,
             include: {
                 user: true,
                 postLikes: true,
@@ -25,7 +52,7 @@ class PostService {
         })
     }
 
-    async getPostById(id : number) {
+    async getPostById(id: number) {
         return prisma.post.findUnique({
             where: {id},
             include: {user: true, postLikes: true}
@@ -36,14 +63,15 @@ class PostService {
         await prisma.post.create({
             data: {
                 htmlContent: post.htmlContent,
-                user: { connect: { id: post.userId } },
+                user: {connect: {id: post.userId}},
             }
         })
         return post;
     }
+
     async updatePost(post: PostModel) {
         await prisma.post.update({
-            where: { id: post.id },
+            where: {id: post.id},
             data: {
                 htmlContent: post.htmlContent,
             },
@@ -53,7 +81,7 @@ class PostService {
 
     async deletePost(id: number) {
         await prisma.post.delete({
-            where: { id: id },
+            where: {id: id},
         })
         return;
     }
@@ -71,72 +99,72 @@ class PostService {
 
     async getFriendPosts(email: string) {
         let userId = prisma.user.findUnique({
-            where: { email: email },
-            select: { id: true }
+            where: {email: email},
+            select: {id: true}
         })
 
 
-        return await prisma.post.findMany({
-            where: {
-                user: {
-                    AND: [
-                        {
-                            OR: [
-                                {
-                                    fromFriendship: {
-                                        some: {
-                                            OR: [
-                                                {
-                                                    toId: userId,
-                                                },
-                                                {
-                                                    fromId: userId,
-                                                },
-                                            ],
-                                        },
-                                    },
-                                },
-                                {
-                                    toFrienship: {
-                                        some: {
-                                            OR: [
-                                                {
-                                                    toId: userId,
-                                                },
-                                                {
-                                                    fromId: userId,
-                                                },
-                                            ],
-                                        },
-                                    },
-                                },
-                            ],
-                        },
-                        {
-                            id: {
-                                not: userId,
-                            },
-                        },
-                    ],
-                },
-            },
-            include: {
-                _count: {
-                    select: {
-                        postLikes: true,
-                        postComments: true,
-                    },
-                },
-                postAttachments: {
-                    select: {
-                        s3Key: true,
-                        type: true,
-                    },
-                },
-            },
-        });
-    }
 
+        // const post = await prisma.post.findMany({
+        //     where: {
+        //         user: {
+        //             AND: [
+        //                 {
+        //                     OR: [
+        //                         {
+        //                             fromFriendship: {
+        //                                 some: {
+        //                                     OR: [
+        //                                         {
+        //                                             toId: userId,
+        //                                         },
+        //                                         {
+        //                                             fromId: userId,
+        //                                         },
+        //                                     ],
+        //                                 },
+        //                             },
+        //                         },
+        //                         {
+        //                             toFrienship: {
+        //                                 some: {
+        //                                     OR: [
+        //                                         {
+        //                                             toId: userId,
+        //                                         },
+        //                                         {
+        //                                             fromId: userId,
+        //                                         },
+        //                                     ],
+        //                                 },
+        //                             },
+        //                         },
+        //                     ],
+        //                 },
+        //                 {
+        //                     id: {
+        //                         not: userId,
+        //                     },
+        //                 },
+        //             ],
+        //         },
+        //     },
+        //     include: {
+        //         _count: {
+        //             select: {
+        //                 postLikes: true,
+        //                 postComments: true,
+        //             },
+        //         },
+        //         postAttachments: {
+        //             select: {
+        //                 s3Key: true,
+        //                 type: true,
+        //             },
+        //         },
+        //     },
+        // });
+    }
 }
 
 export const postService = new PostService();

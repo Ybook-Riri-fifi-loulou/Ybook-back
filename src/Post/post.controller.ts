@@ -4,7 +4,7 @@ import {NextFunction, Request, Response} from "express";
 
 class PostController{
     async getAllPosts (req: Request, res: Response, next: NextFunction) {
-        res.json(await postService.getAllPosts())
+        res.json(await postService.getAllPosts(res.locals.email))
     }
 
     async getPostById (req: Request, res: Response, next: NextFunction) {
