@@ -10,7 +10,7 @@ class FriendshipService {
 
         let userId = await prisma.user.findUnique({
             where: {
-                email: 'alice@prisma.io'
+                email: email
             },
             select: {
                 id: true
