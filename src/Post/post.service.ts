@@ -7,29 +7,12 @@ const prisma = new PrismaClient()
 class PostService {
     async getAllPosts(email: string) {
 
-        let blockedUsersEmails: string[] = [];
-
-        // get list of user blocked
-        let blockedUsers = await prisma.user.findUnique({
-            where: {
-                email: email
-            },
-            select: {
-                blockedUsers: true
-            }
-        })
-
-        //get email for each blocked user and add to array
-        blockedUsers?.blockedUsers.forEach((user) => {
-            blockedUsersEmails.push(user.email);
-        })
-
         return prisma.post.findMany({
             where: {
-                NOT: {
-                    user: {
-                        email: {
-                            in: blockedUsersEmails
+                user: {
+                    blockedByUsers:{
+                        none:{
+                            email: email
                         }
                     }
                 }
@@ -49,7 +32,34 @@ class PostService {
                     }
                 }
             }
-        })
+        });
+
+        // return prisma.post.findMany({
+        //     where: {
+        //         NOT: {
+        //             user: {
+        //                 email: {
+        //                     in: blockedUsersEmails
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     take: 30,
+        //     include: {
+        //         user: true,
+        //         postLikes: true,
+        //         postComments: {
+        //             include: {
+        //                 user: {
+        //                     select: {
+        //                         firstname: true,
+        //                         lastname: true
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // })
     }
 
     async getPostById(id: number) {
