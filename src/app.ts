@@ -8,6 +8,9 @@ import {appRouter} from "./appRouter";
 
 const app = express();
 
+const cors = require('cors');
+app.use(cors({origin: '*'}));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
