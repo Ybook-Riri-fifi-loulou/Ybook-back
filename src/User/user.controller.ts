@@ -18,6 +18,10 @@ class UserController {
     async createUser (req: Request, res: Response, next: NextFunction) {
         res.json(await userService.createUser(res.locals.firstname, res.locals.lastname, res.locals.email))
     }
+
+    async getUserByEmail (req: Request, res: Response, next: NextFunction) {
+        res.json(await userService.getUserByEmail(req.body.email))
+    }
 }
 
 
