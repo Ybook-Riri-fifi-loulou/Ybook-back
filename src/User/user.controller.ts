@@ -20,7 +20,7 @@ class UserController {
     }
 
     async getUserByEmail (req: Request, res: Response, next: NextFunction) {
-        res.json(await userService.getUserByEmail(req.body.email))
+        res.json(await userService.getUserByEmail(req.params.email))
     }
 }
 
