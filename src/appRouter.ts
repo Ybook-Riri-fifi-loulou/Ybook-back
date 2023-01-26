@@ -12,7 +12,7 @@ export const appRouter = Router();
 
 appRouter.use('/post', CheckTokenIsValid, postRouter);
 appRouter.use('/user', userRouter);
-appRouter.use('/postComment',CheckTokenIsValid, postCommentRouter);
+appRouter.use('/postComments',CheckTokenIsValid, postCommentRouter);
 appRouter.use('/postLikes',CheckTokenIsValid, postLikesRouter);
 appRouter.use('conversation',CheckTokenIsValid, conversationRouter);
 appRouter.use('/friendship',CheckTokenIsValid, friendshipRouter);
