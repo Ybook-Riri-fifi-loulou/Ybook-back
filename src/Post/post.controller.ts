@@ -4,7 +4,7 @@ import {NextFunction, Request, Response} from "express";
 
 class PostController{
     async getAllPosts (req: Request, res: Response, next: NextFunction) {
-        res.json(await postService.getAllPosts())
+        res.json(await postService.getAllPosts(res.locals.email))
     }
 
     async getPostById (req: Request, res: Response, next: NextFunction) {
@@ -24,14 +24,12 @@ class PostController{
         res.json(await postService.deletePost(req.body.id))
     }
 
-    async newPostLike (req: Request, res: Response, next: NextFunction) {
-        res.json(await postService.newPostLike(req.body))
-    }
-
-
+    // async newPostLike (req: Request, res: Response, next: NextFunction) {
+    //     res.json(await postService.newPostLike(req.body))
+    // }
 
     async getFriendPosts (req: Request, res: Response, next: NextFunction) {
-        res.json(await postService.getFriendPosts())
+        res.json(await postService.getFriendPosts(res.locals.email))
     }
 
 }
