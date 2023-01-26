@@ -36,7 +36,7 @@ export const idTokenMiddleware = async (req: Request, res: Response, next: NextF
 
 
 export const CheckTokenIsValid = async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.body.token;
+    const token: string = req.headers.authorization?.split(" ")[1] as string;
     const verifier = CognitoJwtVerifier.create({
         tokenUse: "id",
         userPoolId: "eu-west-3_Iekd8jDeb",
