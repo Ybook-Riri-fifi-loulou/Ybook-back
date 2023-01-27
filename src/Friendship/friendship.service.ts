@@ -58,6 +58,35 @@ class FriendshipService {
         });
     }
 
+    async getFriends(id: number) {
+        return await prisma.friendship.findMany({
+            where: {
+                AND: [
+                    {
+                        OR: [
+                            {fromId: id}
+                            , {toId: id}
+                        ],
+                    },
+                    {
+                        status: "ACCEPTED",
+                    },
+                ],
+            },
+            include: {
+                to: true,
+                from: true,
+            }
+        })
+    }
+
+    async deleteFriendship(id: number) {
+        return await prisma.friendship.deleteMany({
+            where: {
+                id: id
+            }
+        })
+    }
 }
 
 export const friendshipService = new FriendshipService();
