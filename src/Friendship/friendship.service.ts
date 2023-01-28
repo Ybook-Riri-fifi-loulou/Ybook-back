@@ -6,15 +6,31 @@ const prisma = new PrismaClient();
 
 class FriendshipService {
 
-    async getPendingFriendships(id: number) {
+    async getPendingFriendshipsTo(id: number) {
         return await prisma.friendship.findMany({
             where: {
                 AND: [
                     {
-                        OR: [
-                            {fromId: id}
-                            , {toId: id}
-                        ],
+                        toId: id,
+                    },
+                    {
+                        status: "PENDING",
+                    },
+                ],
+            },
+            include: {
+                to: true,
+                from: true,
+            }
+        })
+    }
+
+    async getPendingFriendshipsFrom(id: number) {
+        return await prisma.friendship.findMany({
+            where: {
+                AND: [
+                    {
+                        fromId: id,
                     },
                     {
                         status: "PENDING",
