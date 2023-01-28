@@ -5,8 +5,12 @@ import {friendshipService} from "./friendship.service";
 
 class FriendshipController {
 
-    async getFriendships(req: Request, res: Response, next: NextFunction) {
-        res.json(await friendshipService.getPendingFriendships(Number(req.params.id)))
+    async getFriendshipsTo(req: Request, res: Response, next: NextFunction) {
+        res.json(await friendshipService.getPendingFriendshipsTo(Number(req.params.id)))
+    }
+
+    async getFriendshipsFrom(req: Request, res: Response, next: NextFunction) {
+        res.json(await friendshipService.getPendingFriendshipsFrom(Number(req.params.id)))
     }
 
     async getFriends(req: Request, res: Response, next: NextFunction) {
