@@ -1,5 +1,5 @@
 import {PrismaClient} from "@prisma/client";
-
+import { UserModel } from "../User/user.model";
 
 const prisma = new PrismaClient();
 
@@ -76,6 +76,16 @@ class FriendshipService {
         return await prisma.friendship.deleteMany({
             where: {
                 id: id
+            }
+        })
+    }
+
+    async addFriendship(userFromEmail: string, userToEmail: string) {
+        return await prisma.friendship.create({
+            data: {
+                from: { connect: {email: userFromEmail}},
+                to: { connect: {email: userToEmail}},
+                status: 'PENDING'
             }
         })
     }

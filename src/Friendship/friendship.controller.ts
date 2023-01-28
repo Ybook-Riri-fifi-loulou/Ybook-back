@@ -25,6 +25,9 @@ class FriendshipController {
         res.json(await friendshipService.deleteFriendship(Number(req.params.id)))
     }
 
+    async addFrienship(req: Request, res: Response, next: NextFunction) {
+        res.json(await friendshipService.addFriendship(req.params.userFromEmail, req.params.userToEmail))
+    }
 }
 
 export const friendshipController = new FriendshipController();
