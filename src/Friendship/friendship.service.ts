@@ -6,19 +6,7 @@ const prisma = new PrismaClient();
 
 class FriendshipService {
 
-    async getPendingFriendships(email: string) {
-
-        let userId = await prisma.user.findUnique({
-            where: {
-                email: email
-            },
-            select: {
-                id: true
-            }
-        });
-
-        let id = parseInt(JSON.stringify(userId?.id));
-
+    async getPendingFriendships(id: number) {
         return await prisma.friendship.findMany({
             where: {
                 AND: [
@@ -29,11 +17,15 @@ class FriendshipService {
                         ],
                     },
                     {
-                        status: "PENDING"
-                    }
-                ]
+                        status: "PENDING",
+                    },
+                ],
+            },
+            include: {
+                to: true,
+                from: true,
             }
-        });
+        })
     }
 
     async declineFriendship(id: number) {

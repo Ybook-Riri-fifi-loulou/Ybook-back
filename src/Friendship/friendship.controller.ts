@@ -6,7 +6,7 @@ import {friendshipService} from "./friendship.service";
 class FriendshipController {
 
     async getFriendships(req: Request, res: Response, next: NextFunction) {
-        res.json(await friendshipService.getPendingFriendships(res.locals.email))
+        res.json(await friendshipService.getPendingFriendships(Number(req.params.id)))
     }
 
     async getFriends(req: Request, res: Response, next: NextFunction) {
