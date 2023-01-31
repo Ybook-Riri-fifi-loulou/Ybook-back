@@ -1,6 +1,6 @@
 import {PrismaClient} from "@prisma/client"
 import {PostModel} from "./post.model";
-import {PostLikeModel} from "../PostLikes/postLikes.model";
+import AWS from "aws-sdk";
 
 const prisma = new PrismaClient()
 
@@ -69,6 +69,13 @@ class PostService {
         })
     }
 
+    async getUserPosts(id: number) {
+        return await prisma.post.findMany({
+            where: {userId: id},
+            include: {user: true, postLikes: true, postComments: true}
+        });
+    }
+
     async createPost(post: PostModel) {
         await prisma.post.create({
             data: {
@@ -78,6 +85,38 @@ class PostService {
         })
         return post;
     }
+
+    async presignedurl() {
+        const key = "image/rifilou"
+        const params = {Bucket: 'ybook-dev', Key: key, Expires: 60 , ContentType: "image/jpeg"}
+
+        const s3 = new AWS.S3({
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            region: "eu-west-3"
+        });
+        const url = await s3.getSignedUrlPromise('putObject', params).then((url) => {
+            return url
+        });
+        return {url, key}
+    }
+
+
+/*    async createS3Link(file: File) {
+        const client = new S3Client({region: "eu-west-3" })
+        const Bucket = "ybook-dev"
+        const Key = "image/rifilou/"
+        const Fields = {
+            acl: "public-read",
+        };
+        const { url, fields } = await createPresignedPost( client,{
+            Bucket,
+            Key,
+            Fields,
+            Expires: 60 * 60 * 24,
+        });
+        return {url, fields}
+    }*/
 
     async updatePost(post: PostModel) {
         await prisma.post.update({
@@ -96,16 +135,6 @@ class PostService {
         return;
     }
 
-
-    // async newPostLike(postLike: PostLikeModel) {
-    //     await prisma.postLike.create({
-    //         data: {
-    //             user: { connect: { id: postLike.userId } },
-    //             post: { connect: { id: postLike.postId } },
-    //         }
-    //     })
-    //     return postLike;
-    // }
 
     async getFriendPosts(email: string) {
         let userId = prisma.user.findUnique({
@@ -174,6 +203,24 @@ class PostService {
         //         },
         //     },
         // });
+    }
+
+    async getLikesPosts(number: number) {
+        return await prisma.post.findMany({
+            where: {
+                postLikes: {
+                    some: {
+                        userId: number
+                    }
+                }
+            },
+            include: {
+                user: true,
+                postLikes: true,
+                postComments: true
+            }
+        })
+
     }
 }
 
