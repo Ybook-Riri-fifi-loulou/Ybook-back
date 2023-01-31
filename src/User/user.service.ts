@@ -23,13 +23,6 @@ class UserService{
         })
     }
 
-    async getUserPosts(id: string) {
-        return await prisma.post.findMany({
-            where: { userId: Number(id) },
-            include: {user: true}
-        });
-    }
-
     async createUser(firstname: string, lastname: string, email: string) {
         return await prisma.user.create({
             data: {
@@ -37,6 +30,15 @@ class UserService{
                 lastname: lastname,
                 email: email,
             }
+        });
+    }
+
+    async UpdateProfilePicture(id: string, image: string) {
+
+        console.log(image)
+        return await prisma.user.update({
+            where: {id: Number(id)},
+            data: {avatarS3Key: 'image/rililou'}
         });
     }
 

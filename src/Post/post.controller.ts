@@ -1,10 +1,19 @@
 import { postService } from "./post.service";
 import {NextFunction, Request, Response} from "express";
+import {s3Service} from "../Common/s3.service";
 
 
 class PostController{
+    async getLikesPosts (req: Request, res: Response, next: NextFunction) {
+        res.json(await postService.getLikesPosts(Number(req.params.id)))
+    }
+
     async getAllPosts (req: Request, res: Response, next: NextFunction) {
         res.json(await postService.getAllPosts(res.locals.email))
+    }
+
+    async getUserPosts (req: Request, res: Response, next: NextFunction) {
+        res.json(await postService.getUserPosts(Number(req.params.id)))
     }
 
     async getPostById (req: Request, res: Response, next: NextFunction) {
@@ -24,9 +33,10 @@ class PostController{
         res.json(await postService.deletePost(req.body.id))
     }
 
-    // async newPostLike (req: Request, res: Response, next: NextFunction) {
-    //     res.json(await postService.newPostLike(req.body))
-    // }
+    async presignedurl (req: Request, res: Response, next: NextFunction) {
+        res.json(await postService.presignedurl())
+    }
+
 
     async getFriendPosts (req: Request, res: Response, next: NextFunction) {
         res.json(await postService.getFriendPosts(res.locals.email))
