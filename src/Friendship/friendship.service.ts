@@ -1,39 +1,47 @@
 import {PrismaClient} from "@prisma/client";
-
+import { UserModel } from "../User/user.model";
 
 const prisma = new PrismaClient();
 
 
 class FriendshipService {
 
-    async getPendingFriendships(email: string) {
-
-        let userId = await prisma.user.findUnique({
-            where: {
-                email: email
-            },
-            select: {
-                id: true
-            }
-        });
-
-        let id = parseInt(JSON.stringify(userId?.id));
-
+    async getPendingFriendshipsTo(id: number) {
         return await prisma.friendship.findMany({
             where: {
                 AND: [
                     {
-                        OR: [
-                            {fromId: id}
-                            , {toId: id}
-                        ],
+                        toId: id,
                     },
                     {
-                        status: "PENDING"
-                    }
-                ]
+                        status: "PENDING",
+                    },
+                ],
+            },
+            include: {
+                to: true,
+                from: true,
             }
-        });
+        })
+    }
+
+    async getPendingFriendshipsFrom(id: number) {
+        return await prisma.friendship.findMany({
+            where: {
+                AND: [
+                    {
+                        fromId: id,
+                    },
+                    {
+                        status: "PENDING",
+                    },
+                ],
+            },
+            include: {
+                to: true,
+                from: true,
+            }
+        })
     }
 
     async declineFriendship(id: number) {
@@ -58,6 +66,45 @@ class FriendshipService {
         });
     }
 
+    async getFriends(id: number) {
+        return await prisma.friendship.findMany({
+            where: {
+                AND: [
+                    {
+                        OR: [
+                            {fromId: id}
+                            , {toId: id}
+                        ],
+                    },
+                    {
+                        status: "ACCEPTED",
+                    },
+                ],
+            },
+            include: {
+                to: true,
+                from: true,
+            }
+        })
+    }
+
+    async deleteFriendship(id: number) {
+        return await prisma.friendship.deleteMany({
+            where: {
+                id: id
+            }
+        })
+    }
+
+    async addFriendship(userFromEmail: string, userToEmail: string) {
+        return await prisma.friendship.create({
+            data: {
+                from: { connect: {email: userFromEmail}},
+                to: { connect: {email: userToEmail}},
+                status: 'PENDING'
+            }
+        })
+    }
 }
 
 export const friendshipService = new FriendshipService();
