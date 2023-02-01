@@ -38,7 +38,7 @@ class UserService{
         console.log(image)
         return await prisma.user.update({
             where: {id: Number(id)},
-            data: {avatarS3Key: 'image/rililou'}
+            data: {avatarS3Key: 'rifilou'}
         });
     }
 
