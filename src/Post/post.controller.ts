@@ -34,7 +34,11 @@ class PostController{
     }
 
     async presignedurl (req: Request, res: Response, next: NextFunction) {
-        res.json(await postService.presignedurl())
+        res.json(await s3Service.getSignedUrl())
+    }
+
+    async getSignedUrlGet (req: Request, res: Response, next: NextFunction) {
+        res.json(await s3Service.getSignedUrlGet(req.params.key))
     }
 
 

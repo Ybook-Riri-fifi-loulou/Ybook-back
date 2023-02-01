@@ -86,38 +86,6 @@ class PostService {
         return post;
     }
 
-    async presignedurl() {
-        const key = "image/rifilou"
-        const params = {Bucket: 'ybook-dev', Key: key, Expires: 60 , ContentType: "image/jpeg"}
-
-        const s3 = new AWS.S3({
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-            region: "eu-west-3"
-        });
-        const url = await s3.getSignedUrlPromise('putObject', params).then((url) => {
-            return url
-        });
-        return {url, key}
-    }
-
-
-/*    async createS3Link(file: File) {
-        const client = new S3Client({region: "eu-west-3" })
-        const Bucket = "ybook-dev"
-        const Key = "image/rifilou/"
-        const Fields = {
-            acl: "public-read",
-        };
-        const { url, fields } = await createPresignedPost( client,{
-            Bucket,
-            Key,
-            Fields,
-            Expires: 60 * 60 * 24,
-        });
-        return {url, fields}
-    }*/
-
     async updatePost(post: PostModel) {
         await prisma.post.update({
             where: {id: post.id},
