@@ -72,7 +72,20 @@ class PostService {
     async getUserPosts(id: number) {
         return await prisma.post.findMany({
             where: {userId: id},
-            include: {user: true, postLikes: true, postComments: true}
+            include: {
+                user: true,
+                postLikes: true,
+                postComments: {
+                    include: {
+                        user: {
+                            select: {
+                                firstname: true,
+                                lastname: true
+                            }
+                        }
+                    }
+                }
+            }
         });
     }
 
@@ -185,7 +198,16 @@ class PostService {
             include: {
                 user: true,
                 postLikes: true,
-                postComments: true
+                postComments: {
+                    include: {
+                        user: {
+                            select: {
+                                firstname: true,
+                                lastname: true
+                            }
+                        }
+                    }
+                }
             }
         })
 
