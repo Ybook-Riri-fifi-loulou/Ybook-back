@@ -31,7 +31,12 @@ class PostService {
                         }
                     }
                 }
-            }
+            },
+            orderBy: [
+                {
+                    createdAt: 'desc'
+                }
+            ],
         });
 
         // return prisma.post.findMany({
