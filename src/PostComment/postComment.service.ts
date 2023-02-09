@@ -29,7 +29,7 @@ class PostCommentService{
         return;
     }
 
-    async updatePostComment(body: any) {
+    async updatePostComment(body: PostCommentModel) {
         await prisma.postComment.update({
             where: { id: body.id },
             data: {

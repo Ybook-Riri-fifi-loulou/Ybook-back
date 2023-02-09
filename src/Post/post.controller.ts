@@ -38,7 +38,7 @@ class PostController{
     }
 
     async getSignedUrlGet (req: Request, res: Response, next: NextFunction) {
-        res.json(await s3Service.getSignedUrlGet(req.params.key))
+        res.json(await s3Service.getSignedUrlGet(req.query.key as string ?? "" ))
     }
 
 
