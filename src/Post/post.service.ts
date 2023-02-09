@@ -17,7 +17,7 @@ class PostService {
                     }
                 }
             },
-            take: 30,
+            take: 10,
             include: {
                 user: true,
                 postLikes: true,

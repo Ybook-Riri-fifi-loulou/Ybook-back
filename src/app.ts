@@ -5,8 +5,14 @@ import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 import { Response, Request, NextFunction} from 'express'
 import {appRouter} from "./appRouter";
+import { ServerSocket } from './socket'
+import http from 'http'
 
 const app = express();
+
+const httpServer = http.createServer(app);
+
+new ServerSocket(httpServer);
 
 const cors = require('cors');
 app.use(cors({origin: '*'}));
@@ -38,5 +44,7 @@ app.use(function(err: any, req: Request, res: Response, next: NextFunction) {
   res.status(err.status || 500);
   res.json({ err });
 });
+
+httpServer.listen(1337, () => console.info(`Server is running`));
 
 export default app;
