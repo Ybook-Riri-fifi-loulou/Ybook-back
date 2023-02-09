@@ -42,6 +42,16 @@ class UserService{
         });
     }
 
+    async updateProfil(id: number, firstname: string, lastname: string) {
+        return await prisma.user.update({
+            where: {id},
+            data: {
+                firstname,
+                lastname
+            }
+        })
+    }
+
 }
 
 export const userService = new UserService();

@@ -23,6 +23,11 @@ class UserController {
         console.log(req)
         res.json(await userService.UpdateProfilePicture(req.params.id, req.body))
     }
+
+    async UpdateProfil (req: Request, res: Response, next: NextFunction) {
+        console.log(req)
+        res.json(await userService.updateProfil(Number(req.params.id), req.body.firstname, req.body.lastname))
+    }
 }
 
 

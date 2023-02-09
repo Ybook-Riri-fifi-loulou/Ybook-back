@@ -9,4 +9,5 @@ userRouter.get('/', userController.getAllUsers);
 userRouter.get('/:email', userController.getUserByEmail)
 userRouter.get('/:id', userController.getUserById);
 userRouter.post('/', idTokenMiddleware, userController.createUser);
+userRouter.put('/:id', userController.UpdateProfil);
 userRouter.put('/:id/profilePicture', userController.UpdateProfilePicture);
