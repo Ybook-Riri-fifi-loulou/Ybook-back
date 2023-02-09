@@ -5,11 +5,40 @@ import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 import { Response, Request, NextFunction} from 'express'
 import {appRouter} from "./appRouter";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 const app = express();
 
 const cors = require('cors');
 app.use(cors({origin: '*'}));
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, {});
+
+let users: any= [];
+
+io.on('connection', (socket) => {
+  console.log(`⚡: ${socket.id} user just connected!`);
+  socket.on('message', (data) => {
+    io.emit('messageResponse', data);
+  });
+
+  socket.on('newUser', (data) => {
+    users.push(data);
+    io.emit('newUserResponse', users);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('🔥: A user disconnected');
+    users = users.filter((user : any) => user.socketID !== socket.id);
+
+    io.emit('newUserResponse', users);
+    socket.disconnect();
+  });
+});
+
+httpServer.listen(3200);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
