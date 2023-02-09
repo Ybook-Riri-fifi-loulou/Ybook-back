@@ -14,18 +14,24 @@ const cors = require('cors');
 app.use(cors({origin: '*'}));
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, {});
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 let users: any= [];
 
-io.on('connection', (socket) => {
-  console.log(`⚡: ${socket.id} user just connected!`);
-  socket.on('message', (data) => {
+io.on('connection', (socket : any) => {
+  console.log(`User : ${socket.id} user just connected!`);
+  socket.on('message', (data : any) => {
     io.emit('messageResponse', data);
   });
 
-  socket.on('newUser', (data) => {
+  socket.on('newUser', (data : any) => {
     users.push(data);
+    console.log('🚀: users', users);
     io.emit('newUserResponse', users);
   });
 
