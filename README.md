@@ -16,6 +16,11 @@ initialise le projet
 npm install
 ```
 
+generate prisma
+```bash
+npx prisma generate
+```
+
 start le projet
 
 ```bash
