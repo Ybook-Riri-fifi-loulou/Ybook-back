@@ -1,13 +1,28 @@
 stages:
-  - test
   - build
+  - test
   - deploy
 
-test:
+build:
   stage: test
+  image: dindonino/ybook-back:latest
+  cache:
+    paths:
+      - node_modules/
+  variables:
+    CI: "false"
+  script:
+    - echo "Start building"
+    - npm ci
+    - npm run build
+    - echo "Build successfully"
+  tags:
+    - run-on-docker
 
 build:
-  stage: build
+  stage: test
 
 deploy:
   stage: deploy
+  variables: 
+    GIT_STRATEGY: none
