@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "start": "nodemon ./src/index.ts",
-    "typecheck": "tsc"
+    "test": "echo test"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.258.0",

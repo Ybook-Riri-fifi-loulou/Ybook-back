@@ -13,19 +13,20 @@ build:
     CI: "false"
   script:
     - echo "Start building"
-    - npm ci
+    - npm install
     - npm run build
     - echo "Build successfully"
   tags:
     - run-on-docker
 
-build:
+test:
   stage: test
   image: dindonino/ybook-back:latest
-  variables: 
-    GIT_STRATEGY: none
   script:
-    - echo "building..."
+    - echo "testing..."
+    - npm install
+    - npm run typecheck
+    - echo "Type is corrects"
 
   tags:
     - run-on-docker
@@ -37,5 +38,6 @@ deploy:
     - run-on-docker
   variables: 
     GIT_STRATEGY: none
-  scripts:
+  script:
     - echo "deployment..."
+    - npm run start
