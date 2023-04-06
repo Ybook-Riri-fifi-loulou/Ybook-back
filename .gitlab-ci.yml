@@ -21,8 +21,21 @@ build:
 
 build:
   stage: test
+  image: dindonino/ybook-back:latest
+  variables: 
+    GIT_STRATEGY: none
+  script:
+    - echo "building..."
+
+  tags:
+    - run-on-docker
 
 deploy:
   stage: deploy
+  image: alpine
+  tags:
+    - run-on-docker
   variables: 
     GIT_STRATEGY: none
+  scripts:
+    - echo "deployment..."
