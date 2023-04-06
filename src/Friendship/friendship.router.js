@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.friendshipRouter = void 0;
+const express_1 = require("express");
+const friendship_controller_1 = require("./friendship.controller");
+exports.friendshipRouter = (0, express_1.Router)();
+exports.friendshipRouter.get('/:id/pendingfriendshipTo', friendship_controller_1.friendshipController.getFriendshipsTo);
+exports.friendshipRouter.get('/:id/pendingfriendshipFrom', friendship_controller_1.friendshipController.getFriendshipsFrom);
+exports.friendshipRouter.get('/:id/friends', friendship_controller_1.friendshipController.getFriends);
+exports.friendshipRouter.post('/:userFromEmail/:userToEmail', friendship_controller_1.friendshipController.addFrienship);
+exports.friendshipRouter.put('/:id', friendship_controller_1.friendshipController.acceptFriendship);
+exports.friendshipRouter.put('/:id/refused', friendship_controller_1.friendshipController.declineFriendship);
+exports.friendshipRouter.delete('/:id', friendship_controller_1.friendshipController.deleteFriendship);

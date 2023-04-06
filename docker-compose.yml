@@ -1,20 +1,13 @@
-version: '3'
-
+version: "3"
 services:
-  postgres:
-    image: postgres:latest
-    restart: always
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=azertyuiop
-      - POSTGRES_DB=prismamobile
-    volumes:
-      - ./appdata/postgres:/var/lib/postgresql/data
-    networks:
-      - postgresdb
+  prisma-app:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prisma-api
+    env_file:
+      - .env
     ports:
-      - "5432:5432"
-
-networks:
-  postgresdb:
-    external: false
+      - "3100:3100"
+    restart: always

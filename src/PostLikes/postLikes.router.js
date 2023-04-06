@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.postLikesRouter = void 0;
+const express_1 = require("express");
+const postLikes_controller_1 = require("./postLikes.controller");
+exports.postLikesRouter = (0, express_1.Router)();
+exports.postLikesRouter.get('/', postLikes_controller_1.postLikesController.getLikePost);
+exports.postLikesRouter.get('/:id', postLikes_controller_1.postLikesController.getLikePostById);
+exports.postLikesRouter.patch('/', postLikes_controller_1.postLikesController.newPostLike);
+exports.postLikesRouter.delete('/:userId/:postId', postLikes_controller_1.postLikesController.deletePostLike);

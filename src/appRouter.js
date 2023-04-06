@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.appRouter = void 0;
+const express_1 = require("express");
+const post_router_1 = require("./Post/post.router");
+const user_router_1 = require("./User/user.router");
+const postComment_router_1 = require("./PostComment/postComment.router");
+const postLikes_router_1 = require("./PostLikes/postLikes.router");
+const conversation_router_1 = require("./Conversation/conversation.router");
+const idToken_middleware_1 = require("./Common/idToken.middleware");
+const friendship_router_1 = require("./Friendship/friendship.router");
+exports.appRouter = (0, express_1.Router)();
+exports.appRouter.use('/post', idToken_middleware_1.CheckTokenIsValid, post_router_1.postRouter);
+exports.appRouter.use('/user', user_router_1.userRouter);
+exports.appRouter.use('/postComments', idToken_middleware_1.CheckTokenIsValid, postComment_router_1.postCommentRouter);
+exports.appRouter.use('/postLikes', idToken_middleware_1.CheckTokenIsValid, postLikes_router_1.postLikesRouter);
+exports.appRouter.use('conversation', idToken_middleware_1.CheckTokenIsValid, conversation_router_1.conversationRouter);
+exports.appRouter.use('/friendship', idToken_middleware_1.CheckTokenIsValid, friendship_router_1.friendshipRouter);

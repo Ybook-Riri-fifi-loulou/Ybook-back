@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.postRouter = void 0;
+const express_1 = require("express");
+const post_controller_1 = require("./post.controller");
+exports.postRouter = (0, express_1.Router)();
+exports.postRouter.get('/:id/posts', post_controller_1.postController.getUserPosts);
+exports.postRouter.get('/:id/likes', post_controller_1.postController.getLikesPosts);
+exports.postRouter.get('/', post_controller_1.postController.getAllPosts);
+exports.postRouter.get('/presignedurl', post_controller_1.postController.presignedurl);
+exports.postRouter.get('/signedurlget/', post_controller_1.postController.getSignedUrlGet);
+exports.postRouter.get('/:id', post_controller_1.postController.getPostById);
+exports.postRouter.post('/', post_controller_1.postController.createPost);
+exports.postRouter.put('/:id', post_controller_1.postController.updatePost);
+exports.postRouter.delete('/:id', post_controller_1.postController.deletePost);
+exports.postRouter.get('/friends', post_controller_1.postController.getFriendPosts);
